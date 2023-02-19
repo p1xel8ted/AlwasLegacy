@@ -1,5 +1,6 @@
 ﻿using System;
 using HarmonyLib;
+using Rewired.Libraries.SharpDX;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -31,13 +32,19 @@ public partial class Plugin
                 //  _log.LogWarning("Found CameraScript!");
                 var res = SettingsManager.instance.resolutionTexts[SystemSaveSettings.instance.resolutionIndex];
                 var widthStr = res.Split('x')[0];
+                var heightStr = res.Split('x')[1];
                 var widthInt = int.Parse(widthStr);
-                if (Math.Abs(cameraScript.playerScreenPos.x - _horizontalScrollAdjustment.Value) < 25f)
+                var heightInt = int.Parse(heightStr);
+                const float ratio = 16f / 9f;
+                var subValue = ratio * heightInt;
+                var triggerValue = (widthInt - subValue) / 2f;
+               // _log.LogWarning("TriggerValue: " + triggerValue);
+                if (Math.Abs(cameraScript.playerScreenPos.x - triggerValue) < 25f)
                 {
                     cameraScript.playerScreenPos.x = 0;
                 }
 
-                if (Math.Abs(cameraScript.playerScreenPos.x - (widthInt - _horizontalScrollAdjustment.Value)) < 25f)
+                if (Math.Abs(cameraScript.playerScreenPos.x - (widthInt - triggerValue)) < 25f)
                 {
                     cameraScript.playerScreenPos.x = widthInt;
                 }
