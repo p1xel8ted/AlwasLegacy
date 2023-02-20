@@ -23,6 +23,18 @@ public partial class Plugin
         __instance.controllerNode.SetActive(false);
     }
 
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(EventCutsceneBorders), nameof(EventCutsceneBorders.Trigger))]
+    public static bool EventCutsceneBorders_Trigger(ref EventCutsceneBorders __instance)
+    {
+        if (__instance.borderType == EventCutsceneBorders.BorderTypes.showBorders && CutsceneBorders.instance != null)
+        {
+            CutsceneBorders.instance.HideBorders();
+        }
+        __instance.NextInLine();
+        return false;
+    }
+
 
     [HarmonyPrefix]
     [HarmonyPatch(typeof(SettingsManager), nameof(SettingsManager.GetResolutionIndex))]

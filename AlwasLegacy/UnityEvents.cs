@@ -1,6 +1,5 @@
 ﻿using System;
 using HarmonyLib;
-using Rewired.Libraries.SharpDX;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -12,6 +11,12 @@ public partial class Plugin
 {
     public void LateUpdate()
     {
+        var dialogUiIntro = GameObject.Find("Canvas/DialogGUI");
+        if (dialogUiIntro != null)
+        {
+            dialogUiIntro.transform.localScale = new Vector3(_dialogScale.Value, _dialogScale.Value, _dialogScale.Value);
+        }
+
         var dialogUI = GameObject.Find("Canvas/MoveCanvasAtStart/DialogGUI");
         if (dialogUI != null)
         {
@@ -24,9 +29,9 @@ public partial class Plugin
             itemPickup.transform.localScale = new Vector3(_dialogScale.Value, _dialogScale.Value, _dialogScale.Value);
         }
 
-        if (Camera.current != null)
+        if (CameraScript.instance != null)
         {
-            var cameraScript = Camera.current.gameObject.GetComponentInChildren<CameraScript>();
+            var cameraScript = CameraScript.instance;
             if (cameraScript != null)
             {
                 //  _log.LogWarning("Found CameraScript!");
@@ -38,7 +43,7 @@ public partial class Plugin
                 const float ratio = 16f / 9f;
                 var subValue = ratio * heightInt;
                 var triggerValue = (widthInt - subValue) / 2f;
-               // _log.LogWarning("TriggerValue: " + triggerValue);
+                // _log.LogWarning("TriggerValue: " + triggerValue);
                 if (Math.Abs(cameraScript.playerScreenPos.x - triggerValue) < 25f)
                 {
                     cameraScript.playerScreenPos.x = 0;
@@ -51,38 +56,89 @@ public partial class Plugin
             }
         }
 
-        var stuff3 = GameObject.Find("Canvas/MoveCanvasAtStart/CutsceneBorders");
-        if (stuff3 != null)
-        {
-            stuff3.SetActive(false);
-        }
+        //1633.734 720 -0.8627
+        //1280 720 0
 
-        var stuff4 = GameObject.Find("Canvas/MoveCanvasAtStart/InfoPopup");
-        if (stuff4 != null)
+        var infoPopup = GameObject.Find("Canvas/MoveCanvasAtStart/InfoPopup");
+        if (infoPopup != null)
         {
-            if (Math.Abs(stuff4.transform.position.x - 1720) < 0.001)
+            if (Math.Abs(infoPopup.transform.position.x - 1720) < 1 || Math.Abs(infoPopup.transform.position.x - 1340) < 1)
             {
-                var position = stuff4.transform.position;
-                position = new Vector3(1620, position.y, position.z);
-                stuff4.transform.position = position;
+                var position = infoPopup.transform.position;
+                position = new Vector3(1280, position.y, position.z);
+                infoPopup.transform.position = position;
             }
         }
 
-        var cutsceneBorders = FindObjectsOfType<CutsceneBorders>();
-        foreach (var cutsceneBorder in cutsceneBorders)
+        var leftHud = GameObject.Find("Canvas/MoveCanvasAtStart/HudManager/ParentNode/Hud_Base");
+        if (leftHud != null)
         {
-            cutsceneBorder.enabled = false;
+            leftHud.transform.position = new Vector3(270f, 1330f, 0f);
+        }
+
+        var rightHud = GameObject.Find("Canvas/MoveCanvasAtStart/HudManager/ParentNode/HealthDots");
+        if (rightHud != null)
+        {
+            rightHud.transform.position = new Vector3(2165f, 720f, 0f);
+        }
+
+        var settingsBg = GameObject.Find("Canvas/MoveCanvasAtStart/PauseNode/ParentNode/BG");
+        if (settingsBg != null)
+        {
+            settingsBg.transform.localScale = new Vector3(200f, 1, 1);
+        }
+
+        var settingsVig = GameObject.Find("Canvas/MoveCanvasAtStart/PauseNode/ParentNode/Vignette");
+        if (settingsVig != null)
+        {
+            settingsVig.transform.localScale = new Vector3(200f, 1, 1);
+        }
+
+        var settingsBack = GameObject.Find("Canvas/MoveCanvasAtStart/PauseNode/ParentNode/BottomRightPanel");
+
+        if (settingsBack != null)
+        {
+            if (Math.Abs(settingsBack.transform.position.x - 1720) < 0.001)
+            {
+                var position = settingsBack.transform.position;
+                position = new Vector3(2160, position.y, position.z);
+                settingsBack.transform.position = position;
+            }
+        }
+
+
+        var loadingScreenBackground = GameObject.Find("Canvas/ParentNode/LoadingScreen/BlackBG");
+        if (loadingScreenBackground != null)
+        {
+            loadingScreenBackground.transform.localScale = new Vector3(200f, 1, 1);
+        }
+
+        var mainMenuSettingsHidden = GameObject.Find("Canvas/ParentNode/SettingsNode");
+        if (mainMenuSettingsHidden != null)
+        {
+            if (Math.Abs(mainMenuSettingsHidden.transform.position.x - 4280) < 0.001)
+            {
+                var position = mainMenuSettingsHidden.transform.position;
+                position = new Vector3(10000, position.y, position.z);
+                mainMenuSettingsHidden.transform.position = position;
+            }
+        }
+
+        var topBottomBorders = GameObject.Find("Canvas/MoveCanvasAtStart/Borders");
+        if (topBottomBorders != null)
+        {
+            topBottomBorders.transform.localScale = new Vector3(200f, 1, 1);
         }
 
         if (!SceneManager.GetActiveScene().name.Contains("Main"))
         {
-            if (Camera.current != null) Camera.current.backgroundColor = Color.black;
+            if (Camera.main != null) Camera.main.backgroundColor = Color.black;
         }
 
         var canvasScalers = FindObjectsOfType<CanvasScaler>();
         foreach (var canvasScaler in canvasScalers)
         {
-            canvasScaler.referenceResolution = new Vector2(640, 350);
+            // canvasScaler.referenceResolution = new Vector2(640, 350);
             canvasScaler.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
             canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         }
