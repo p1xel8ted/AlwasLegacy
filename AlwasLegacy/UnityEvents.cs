@@ -23,6 +23,7 @@ public partial class Plugin
             dialogUI.transform.localScale = new Vector3(_dialogScale.Value, _dialogScale.Value, _dialogScale.Value);
         }
 
+
         var itemPickup = GameObject.Find("Canvas/MoveCanvasAtStart/ItemPickup");
         if (itemPickup != null)
         {
@@ -44,90 +45,131 @@ public partial class Plugin
                 var subValue = ratio * heightInt;
                 var triggerValue = (widthInt - subValue) / 2f;
                 // _log.LogWarning("TriggerValue: " + triggerValue);
-                if (Math.Abs(cameraScript.playerScreenPos.x - triggerValue) < 25f)
+                if (Math.Abs(cameraScript.playerScreenPos.x - triggerValue) <= 3f)
                 {
                     cameraScript.playerScreenPos.x = 0;
                 }
 
-                if (Math.Abs(cameraScript.playerScreenPos.x - (widthInt - triggerValue)) < 25f)
+                if (Math.Abs(cameraScript.playerScreenPos.x - (widthInt - triggerValue)) <= 3f)
                 {
                     cameraScript.playerScreenPos.x = widthInt;
                 }
             }
         }
 
-        //1633.734 720 -0.8627
-        //1280 720 0
 
         var infoPopup = GameObject.Find("Canvas/MoveCanvasAtStart/InfoPopup");
         if (infoPopup != null)
         {
-            if (Math.Abs(infoPopup.transform.position.x - 1720) < 1 || Math.Abs(infoPopup.transform.position.x - 1340) < 1)
+            if (infoPopup.transform.localPosition.x == 0)
             {
-                var position = infoPopup.transform.position;
-                position = new Vector3(1280, position.y, position.z);
-                infoPopup.transform.position = position;
+                var position = infoPopup.transform.localPosition;
+                position = new Vector3(-110f, position.y, position.z);
+                infoPopup.transform.localPosition = position;
             }
         }
+        
+        var settingsOpenBackButton = GameObject.Find("Canvas/ParentNode/SettingsNode/BottomRightBG");
+        if (settingsOpenBackButton != null)
+        {
+            var buttonText = GameObject.Find("Canvas/ParentNode/SettingsNode/ExitText");
+
+            if (buttonText != null)
+            {
+                buttonText.transform.parent = settingsOpenBackButton.transform;
+            }
+
+            var localPosition = settingsOpenBackButton.transform.localPosition;
+            if (Math.Abs(localPosition.x - -252) < 0.001f)
+            {
+                localPosition = new Vector3(-365f, localPosition.y, localPosition.z);
+                settingsOpenBackButton.transform.localPosition = localPosition;
+            }
+        }
+        
 
         var leftHud = GameObject.Find("Canvas/MoveCanvasAtStart/HudManager/ParentNode/Hud_Base");
         if (leftHud != null)
         {
-            leftHud.transform.position = new Vector3(270f, 1330f, 0f);
+            var block = GameObject.Find("Canvas/MoveCanvasAtStart/HudManager/ParentNode/Hud_icon_Block");
+            var bubble = GameObject.Find("Canvas/MoveCanvasAtStart/HudManager/ParentNode/Hud_icon_Bubble");
+            var light = GameObject.Find("Canvas/MoveCanvasAtStart/HudManager/ParentNode/Hud_icon_Light");
+
+            if (block != null)
+            {
+                block.transform.parent = leftHud.transform;
+            }
+
+            if (bubble != null)
+            {
+                bubble.transform.parent = leftHud.transform;
+            }
+
+            if (light != null)
+            {
+                light.transform.parent = leftHud.transform;
+            }
+
+            var localPosition = leftHud.transform.localPosition;
+            localPosition = new Vector3(-365f, localPosition.y, localPosition.z);
+            leftHud.transform.localPosition = localPosition;
         }
 
         var rightHud = GameObject.Find("Canvas/MoveCanvasAtStart/HudManager/ParentNode/HealthDots");
         if (rightHud != null)
         {
-            rightHud.transform.position = new Vector3(2165f, 720f, 0f);
+            var localPosition = rightHud.transform.localPosition;
+            localPosition = new Vector3(114f, localPosition.y, localPosition.z);
+            rightHud.transform.localPosition = localPosition;
         }
 
-        var settingsBg = GameObject.Find("Canvas/MoveCanvasAtStart/PauseNode/ParentNode/BG");
-        if (settingsBg != null)
-        {
-            settingsBg.transform.localScale = new Vector3(200f, 1, 1);
-        }
-
-        var settingsVig = GameObject.Find("Canvas/MoveCanvasAtStart/PauseNode/ParentNode/Vignette");
-        if (settingsVig != null)
-        {
-            settingsVig.transform.localScale = new Vector3(200f, 1, 1);
-        }
 
         var settingsBack = GameObject.Find("Canvas/MoveCanvasAtStart/PauseNode/ParentNode/BottomRightPanel");
 
         if (settingsBack != null)
         {
-            if (Math.Abs(settingsBack.transform.position.x - 1720) < 0.001)
+            if (settingsBack.transform.localPosition.x == 0)
             {
-                var position = settingsBack.transform.position;
-                position = new Vector3(2160, position.y, position.z);
-                settingsBack.transform.position = position;
+                var position = settingsBack.transform.localPosition;
+                position = new Vector3(110, position.y, position.z);
+                settingsBack.transform.localPosition = position;
             }
-        }
-
-
-        var loadingScreenBackground = GameObject.Find("Canvas/ParentNode/LoadingScreen/BlackBG");
-        if (loadingScreenBackground != null)
-        {
-            loadingScreenBackground.transform.localScale = new Vector3(200f, 1, 1);
         }
 
         var mainMenuSettingsHidden = GameObject.Find("Canvas/ParentNode/SettingsNode");
         if (mainMenuSettingsHidden != null)
         {
-            if (Math.Abs(mainMenuSettingsHidden.transform.position.x - 4280) < 0.001)
+            if (Math.Abs(mainMenuSettingsHidden.transform.localPosition.x - 640) < 0.001)
             {
-                var position = mainMenuSettingsHidden.transform.position;
+                var position = mainMenuSettingsHidden.transform.localPosition;
                 position = new Vector3(10000, position.y, position.z);
-                mainMenuSettingsHidden.transform.position = position;
+                mainMenuSettingsHidden.transform.localPosition = position;
             }
+        }
+
+
+        var settingsBg = GameObject.Find("Canvas/MoveCanvasAtStart/PauseNode/ParentNode/BG");
+        if (settingsBg != null)
+        {
+            settingsBg.transform.localScale = new Vector3(2000f, 1, 1);
+        }
+
+        var settingsVig = GameObject.Find("Canvas/MoveCanvasAtStart/PauseNode/ParentNode/Vignette");
+        if (settingsVig != null)
+        {
+            settingsVig.transform.localScale = new Vector3(2000f, 1, 1);
+        }
+
+        var loadingScreenBackground = GameObject.Find("Canvas/ParentNode/LoadingScreen/BlackBG");
+        if (loadingScreenBackground != null)
+        {
+            loadingScreenBackground.transform.localScale = new Vector3(2000f, 1, 1);
         }
 
         var topBottomBorders = GameObject.Find("Canvas/MoveCanvasAtStart/Borders");
         if (topBottomBorders != null)
         {
-            topBottomBorders.transform.localScale = new Vector3(200f, 1, 1);
+            topBottomBorders.transform.localScale = new Vector3(2000f, 1, 1);
         }
 
         if (!SceneManager.GetActiveScene().name.Contains("Main"))
