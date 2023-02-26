@@ -1,6 +1,7 @@
 ### Alwa's Legacy Ultra-wide Fix
 
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/F2F2DI3WA)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/F2F2DI3WA)<br>
+[![Github All Releases](https://img.shields.io/github/downloads/p1xel8ted/AlwasLegacy/total.svg)](https://github.com/p1xel8ted/AlwasLegacy/releases)
 
 ## Features
 - Allows selection of main display resolution in the in-game resolution list.
